@@ -2,6 +2,8 @@
 bundle.js
 npm-debug.log
 
+src/config/youtube.js
+
 # IntelliJ
 *.iml
 /.idea
