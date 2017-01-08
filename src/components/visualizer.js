@@ -5,7 +5,6 @@ import * as THREE from '../../node_modules/three/build/three.min.js';
 class Visualizer extends Component {
 
   wholeLottaShit() {
-    console.log('beginning of the shit')
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 
@@ -28,22 +27,13 @@ class Visualizer extends Component {
 
     var analyser = context.createAnalyser();
 
-
-    // audioElement.addEventListener('canplay', function() {
-    //   console.log('is the addEventListener triggering?!?!?')
-    //   var source = context.createMediaElementSource(audioElement);
-    //
-    //   source.connect(analyser);
-    //   analyser.connect(context.destination);
-    //
-    // });
     (function() {
       var source = context.createMediaElementSource(audioElement);
 
       source.connect(analyser);
       analyser.connect(context.destination);
     })();
-    
+
     analyser.fftSize = 64;
 
 
@@ -55,7 +45,7 @@ class Visualizer extends Component {
     var frameCount = 0;
     var fps, fpsInterval, startTime, now, then, elapsed;
 
-    startAnimating(32);
+    startAnimating(1);
 
     function startAnimating(fps) {
       fpsInterval = 1000 /fps;
@@ -68,9 +58,6 @@ class Visualizer extends Component {
       var hex = rgb.map((color) => color.toString(16)).join('');
       return `0x${hex}`;
     }
-
-
-    console.log('here comes frequency data', frequencyData);
 
     function render() {
 
@@ -102,10 +89,6 @@ class Visualizer extends Component {
     render();
   }
 
-  // componentDidMount() {
-  //   console.log('inside componentDidMount, checking out the refs', this.refs.aud);
-  // }
-
 
   render() {
     return (
@@ -124,23 +107,3 @@ class Visualizer extends Component {
 }
 
 export default Visualizer;
-
-
-
-// <html>
-//     <head>
-//         <title>Song Visualizer</title>
-//     </head>
-//
-//     <body>
-        // <audio controls id="player">
-        //     <source src="ShakeItOff.mp3" type="audio/mpeg" />
-        // </audio>
-//         <script src="./three.min.js"></script>
-//         <script src="./starter.js"></script>
-//         <script src="./audio.js"></script>
-//         <script>
-//             context.crossOrigin = 'anonymous';
-//         </script>
-//     </body>
-// </html>
