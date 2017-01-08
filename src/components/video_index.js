@@ -3,6 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {fetchVideos, selectVideo} from '../actions/index';
 import {Link} from 'react-router';
+
 import {YOUTUBE_API_KEY} from '../config/youtube';
 import SearchBar from './search_bar';
 import VideoList from './video_list';
@@ -16,7 +17,7 @@ class VideoIndex extends Component {
     router: PropTypes.object
   }
   componentWillMount() {
-    this.props.fetchVideos('Taylor Swift');
+    this.props.fetchVideos('Soylent');
   }
 
   videoSearch(term) {
@@ -28,9 +29,10 @@ class VideoIndex extends Component {
   }
 
   render() {
-    const vidSearch = _.debounce((term) => {this.videoSearch(term)}, 800)
+    const vidSearch = _.debounce((term) => {this.videoSearch(term)}, 1000)
+    console.log('here is the root of the aud ref that will kick it all off', this.refs)
     return (
-      <div>
+      <div ref="aud">
         <SearchBar onSearchTermChange={_.debounce((term) => {this.videoSearch(term)}, 500)}/>
         <div className="row">
           <VideoDetail video={this.props.video}/>
