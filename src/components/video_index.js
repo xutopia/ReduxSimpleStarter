@@ -9,9 +9,6 @@ import VideoList from './video_list';
 import VideoDetail from './video_detail';
 import YTSearch from 'youtube-api-search';
 
-
-
-
 //create a new component, which should produce some HTML
 
 class VideoIndex extends Component {
@@ -22,32 +19,8 @@ class VideoIndex extends Component {
     this.props.fetchVideos('Taylor Swift');
   }
 
-  // constructor(props) {
-  //   super(props);
-  //
-  //   this.state = {
-  //     videos: [],
-  //     video: null
-  //   };
-  //
-  //   this.videoSearch('Soylent');
-  // }
-
-  // videoSearch(term) {
-  //   YTSearch({key: YOUTUBE_API_KEY, term: term}, (videos) => {
-  //     this.setState({
-  //       videos: videos,
-  //       video: videos[0]
-  //     })
-  //   });
-  // }
-
-  componentWillReceiveProps(nextProps){
-    console.log('current props: ', this.props, ' next props: ', nextProps)
-  }
-
-  componentWillUpdate(nextProps) {
-    console.log('COMPONENT WILL UPDATE')
+  videoSearch(term) {
+    this.props.fetchVideos(term);
   }
 
   pickVideo = (index) => {
@@ -55,17 +28,17 @@ class VideoIndex extends Component {
   }
 
   render() {
-    // this.props.fetchVideos('Taylor Swift');
     const vidSearch = _.debounce((term) => {this.videoSearch(term)}, 800)
-    console.log('inside the main, changing state, should see twice: ', this.props);
-    return (<div>
-      <SearchBar />
-      <div className="row">
-        <VideoDetail video={this.props.video}/>
-        <VideoList videos={this.props.videos} pickVideo={this.pickVideo}/>
+    return (
+      <div>
+        <SearchBar onSearchTermChange={_.debounce((term) => {this.videoSearch(term)}, 500)}/>
+        <div className="row">
+          <VideoDetail video={this.props.video}/>
+          <VideoList videos={this.props.videos} pickVideo={this.pickVideo}/>
+        </div>
+        <Link to="/visualizer" className="btn btn-primary btn-danger">Visualize</Link>
       </div>
-      <Link to="/visualizer" className="btn btn-primary btn-danger">Visualize</Link>
-    </div>);
+    );
   }
 }
 
