@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {fetchVideos} from '../actions/index';
+import {fetchVideos, selectVideo} from '../actions/index';
 import {Link} from 'react-router';
 import {YOUTUBE_API_KEY} from '../config/youtube';
 import SearchBar from './search_bar';
@@ -15,10 +15,11 @@ import YTSearch from 'youtube-api-search';
 //create a new component, which should produce some HTML
 
 class VideoIndex extends Component {
-
+  static contextTypes = {
+    router: PropTypes.object
+  }
   componentWillMount() {
     this.props.fetchVideos('Taylor Swift');
-    console.log('inside mount: ', this);
   }
 
   // constructor(props) {
@@ -41,23 +42,36 @@ class VideoIndex extends Component {
   //   });
   // }
 
+  componentWillReceiveProps(nextProps){
+    console.log('current props: ', this.props, ' next props: ', nextProps)
+  }
+
+  componentWillUpdate(nextProps) {
+    console.log('COMPONENT WILL UPDATE')
+  }
+
+  pickVideo = (index) => {
+    this.props.selectVideo(index);
+  }
+
   render() {
-    // const videoSearch = _.debounce((term) => {this.videoSearch(term)}, 800)
-    console.log('inside index: ', this);
+    // this.props.fetchVideos('Taylor Swift');
+    const vidSearch = _.debounce((term) => {this.videoSearch(term)}, 800)
+    console.log('inside the main, changing state, should see twice: ', this.props);
     return (<div>
       <SearchBar />
-      <VideoDetail video={this.props.video}/>
-      <VideoList
-        videos={this.props.videos}/>
+      <div className="row">
+        <VideoDetail video={this.props.video}/>
+        <VideoList videos={this.props.videos} pickVideo={this.pickVideo}/>
+      </div>
+      <Link to="/visualizer" className="btn btn-primary btn-danger">Visualize</Link>
     </div>);
   }
 }
 
-// onVideoSelect={selectedVideo => this.setState({video: selectedVideo})}
 
 function mapStateToProps(state) {
-  console.log('inside the map state to props', state);
-  return {videos: state.videos.videos, video: state.videos.videos[0]}
+  return {video: state.videos.video, videos: state.videos.videos}
 }
 
-export default connect(mapStateToProps, {fetchVideos})(VideoIndex);
+export default connect(mapStateToProps, {fetchVideos, selectVideo})(VideoIndex);

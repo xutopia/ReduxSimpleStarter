@@ -6,9 +6,23 @@ class Visualizer extends Component {
   render() {
     console.log('inside the visualizer route');
     return (
-      <div>
-        A baby is born!
-      </div>
+      <html>
+          <head>
+              <title>Song Visualizer</title>
+          </head>
+
+          <body>
+              <audio controls id="player">
+                  <source src="ShakeItOff.mp3" type="audio/mpeg" />
+              </audio>
+              <script src="./three.min.js"></script>
+              <script src="./starter.js"></script>
+              <script src="./audio.js"></script>
+              <script>
+                  context.crossOrigin = 'anonymous';
+              </script>
+          </body>
+      </html>
     );
   }
 
