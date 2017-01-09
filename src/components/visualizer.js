@@ -5,8 +5,11 @@ import * as THREE from '../../node_modules/three/build/three.min.js';
 class Visualizer extends Component {
 
   wholeLottaShit() {
+    //****** CREATE SCENE ************
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+    var camera = new THREE.PerspectiveCamera(
+      75, window.innerWidth / window.innerHeight, 0.1, 100
+    );
 
     var renderer = new THREE.WebGLRenderer();
 
@@ -14,41 +17,35 @@ class Visualizer extends Component {
     document.body.appendChild(renderer.domElement);
 
     var geometry = new THREE.TorusGeometry(13, 3, 80, 100);
-    var material = new THREE.MeshBasicMaterial({color: 0x3192ed, wireframe: true});
+    var material = new THREE.MeshBasicMaterial(
+      {color: 0x3192ed, wireframe: true}
+    );
     var torus = new THREE.Mesh(geometry, material);
 
     scene.add(torus);
 
     camera.position.z = 75;
+    // ********
 
+
+
+    //********** CREATE FREQUENCY DATA ************
     var context = new AudioContext();
 
     var audioElement = this.refs.aud;
 
     var analyser = context.createAnalyser();
 
-    // audioElement.addEventListener('canplay', function() {
-    //   console.log('inside the addEventListener again');
-    //
-    //   var source = context.createMediaElementSource(audioElement);
-    //
-    //   source.connect(analyser);
-    //   analyser.connect(context.destination);
-    //
-    // });
-
     (function() {
       var source = context.createMediaElementSource(audioElement);
-
       source.connect(analyser);
       analyser.connect(context.destination);
     })();
 
     analyser.fftSize = 64;
 
-
     var frequencyData = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(frequencyData);
+    //*************************
 
 
     var stop = false;
@@ -81,6 +78,7 @@ class Visualizer extends Component {
       if(elapsed > fpsInterval) {
         then = now - (elapsed % fpsInterval);
 
+        //********** UPDATE GEOMETRY*************
         if(frequencyData[0] !== 0) {
           torus.rotation.x += 0.01;
           torus.rotation.y += 0.01;
@@ -90,13 +88,21 @@ class Visualizer extends Component {
         torus.scale.y = frequencyData[5] / 100
         torus.scale.z = frequencyData[7] / 100
 
-        torus.material.color.setHex(convertIntToHexColor(frequencyData[8], frequencyData[24], frequencyData[31]));
+        function convertIntToHexColor(...rgb) {
+          var hex = rgb.map((color) => color.toString(16)).join('');
+          return `0x${hex}`;
+        }
+
+        torus.material.color.setHex(
+          convertIntToHexColor(
+            frequencyData[8], frequencyData[24], frequencyData[31]
+          )
+        );
+
         renderer.render(scene, camera);
       }
 
     }
-
-    render();
   }
 
 

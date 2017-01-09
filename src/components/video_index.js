@@ -29,11 +29,10 @@ class VideoIndex extends Component {
   }
 
   render() {
-    const vidSearch = _.debounce((term) => {this.videoSearch(term)}, 1000)
     console.log('here is the root of the aud ref that will kick it all off', this.refs)
     return (
       <div ref="aud">
-        <SearchBar onSearchTermChange={_.debounce((term) => {this.videoSearch(term)}, 500)}/>
+        <SearchBar onSearchTermChange={_.debounce((term) => {this.videoSearch(term)}, 800)}/>
         <div className="row">
           <VideoDetail video={this.props.video}/>
           <VideoList videos={this.props.videos} pickVideo={this.pickVideo}/>
