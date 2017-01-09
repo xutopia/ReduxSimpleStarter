@@ -27,6 +27,16 @@ class Visualizer extends Component {
 
     var analyser = context.createAnalyser();
 
+    // audioElement.addEventListener('canplay', function() {
+    //   console.log('inside the addEventListener again');
+    //
+    //   var source = context.createMediaElementSource(audioElement);
+    //
+    //   source.connect(analyser);
+    //   analyser.connect(context.destination);
+    //
+    // });
+
     (function() {
       var source = context.createMediaElementSource(audioElement);
 
@@ -45,7 +55,7 @@ class Visualizer extends Component {
     var frameCount = 0;
     var fps, fpsInterval, startTime, now, then, elapsed;
 
-    startAnimating(1);
+    startAnimating(32);
 
     function startAnimating(fps) {
       fpsInterval = 1000 /fps;
@@ -93,8 +103,8 @@ class Visualizer extends Component {
   render() {
     return (
       <div>
-        <audio controls="controls" ref="aud" autoPlay>
-          <source src="http://127.0.0.1:8000/ShakeItOff.mp3" type="audio/mpeg"/>
+        <audio controls="controls" ref="aud">
+          <source src="http://127.0.0.1:8080/ShakeItOff.mp3" />
         </audio>
         <button onClick={() => this.wholeLottaShit()}>Visualize</button>
         <Link to="/" className="btn btn-primary btn-lg">Back To Safety!</Link>
